@@ -1,0 +1,12 @@
+- name: Change current schedulers
+  shell: "echo deadline > /sys/block/{{ item }}/queue/scheduler"
+  with_items: "{{ data_disks }}"
+
+- name: Change current nr_requests
+  shell: "echo {{ nr_requests }} > /sys/block/{{ item }}/queue/nr_requests"
+  with_items: "{{ data_disks }}"
+
+- name: Change current read_ahead
+  shell: "echo {{ read_ahead_kb }} > /sys/block/{{ item }}/queue/read_ahead_kb"
+  with_items: "{{ data_disks }}"
+

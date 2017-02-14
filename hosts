@@ -1,0 +1,15 @@
+# file: hosts-example 
+# Edit this file with your Cluster's parameters, information and architecture.
+# By CSC's FGCI deployment team @ Nov. 2015 - http://www.csc.fi
+
+[grid]
+narvi-grid ext_ip_addr=130.230.56.42 int_ip_addr=10.1.10.3
+
+[merope-nfs]
+merope-nfs1 data_disks='["sdb","sdc","sdd","sde"]'
+merope-nfs2 data_disks='["sdb","sdc","sdd","sde"]'
+merope-nfs3 data_disks='["sdb","sdc","sdd","sde","sdf","sdg","sdh","sdi","sdj","sdk","sdl","sdm","sdn","sdo","sdp","sdq","sdr","sdt","sdu","sdv","sdw"]'
+merope-nfs4 data_disks='["sdb","sdc","sdd","sde","sdf"]'
+merope-nfs5 data_disks=sdg
+scratch data_disks=sdb
+

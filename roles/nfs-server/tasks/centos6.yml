@@ -1,0 +1,61 @@
+---
+- name: Lets confirm proper sysctl-settings
+  tags: sysctl
+  lineinfile: 
+        dest: /etc/sysctl.conf 
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+        backup: yes
+  with_items: 
+    - { regexp: '^kernel.shmmax', line: "kernel.shmmax = {{ nfs_kernel_shmmax }}" }
+    - { regexp: '^kernel.shmall', line: "kernel.shmall = {{ nfs_kernel_shmall }}" }
+    - { regexp: '^net.ipv4.tcp_timestamps', line: "net.ipv4.tcp_timestamps = {{ nfs_net_ipv4_tcp_timestamps }}" }
+    - { regexp: '^net.ipv4.tcp_sack', line: "net.ipv4.tcp_sack = {{ nfs_net_ipv4_tcp_sack }}" }
+    - { regexp: '^net.core.netdev_max_backlog', line: "net.core.netdev_max_backlog = {{ nfs_net_core_netdev_max_backlog }}" }
+    - { regexp: '^net.core.rmem_max', line: "net.core.rmem_max = {{ nfs_net_core_rmem_max }}" }
+    - { regexp: '^net.core.wmem_max', line: "net.core.wmem_max = {{ nfs_net_core_wmem_max }}" }
+    - { regexp: '^net.core.rmem_default', line: "net.core.rmem_default = {{ nfs_net_core_rmem_default }}" }
+    - { regexp: '^net.core.wmem_default', line: "net.core.wmem_default = {{ nfs_net_core_wmem_default }}" }
+    - { regexp: '^net.core.optmem_max', line: "net.core.optmem_max = {{ nfs_net_core_optmem_max }}" }
+    - { regexp: '^net.ipv4.tcp_rmem', line: "net.ipv4.tcp_rmem = {{ nfs_net_ipv4_tcp_rmem }}" }
+    - { regexp: '^net.ipv4.tcp_low_latency', line: "net.ipv4.tcp_low_latency = {{ nfs_net_ipv4_tcp_low_latency }}" }
+    - { regexp: '^vm.dirty_background_ratio', line: "vm.dirty_background_ratio = {{ nfs_vm_dirty_background_ratio }}" }
+    - { regexp: '^vm.dirty_ratio', line: "vm.dirty_ratio = {{ nfs_vm_dirty_ratio }}" }
+    - { regexp: '^vm.min_free_kbytes', line: "vm.min_free_kbytes = {{ nfs_vm_min_free_kbytes }}" }
+    - { regexp: '^vm.zone_reclaim_mode', line: "vm.zone_reclaim_mode = {{ nfs_vm_zone_reclaim_mode }}" }
+
+- name: Set default IO-scheduler to deadline for data-disks
+  tags: scheduler
+  lineinfile:
+    dest: /etc/rc.local
+    regexp: "echo .* > /sys/block/{{ item }}/queue/scheduler"
+    line: "echo deadline > /sys/block/{{ item }}/queue/scheduler"
+    state: present
+    backup: yes
+  with_items: "{{ data_disks }}"
+  notify: Change current schedulers
+
+- name: Set longer scheduler queue
+  tags: scheduler
+  lineinfile:
+    dest: /etc/rc.local
+    regexp: "echo .* > /sys/block/{{ item }}/queue/nr_requests"
+    line: "echo {{ nr_requests }} > /sys/block/{{ item }}/queue/nr_requests"
+    state: present
+    backup: yes
+  with_items: "{{ data_disks }}"
+  notify: Change current nr_requests
+
+- name: Set longer readahead 
+  tags: scheduler
+  lineinfile:
+    dest: /etc/rc.local
+    regexp: "echo .* > /sys/block/{{ item }}/queue/read_ahead_kb"
+    line: "echo {{ read_ahead_kb }} > /sys/block/{{ item }}/queue/read_ahead_kb"
+    state: present
+    backup: yes
+  with_items: "{{ data_disks }}"
+  notify: Change current read_ahead
+
+

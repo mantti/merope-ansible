@@ -1,0 +1,23 @@
+---
+nfs_kernel_shmmax: 68719476736
+nfs_kernel_shmall: 4294967296
+nfs_net_ipv4_tcp_timestamps: 0
+nfs_net_ipv4_tcp_sack: 1
+nfs_net_core_netdev_max_backlog: 250000
+nfs_net_core_rmem_max: 4194304
+nfs_net_core_wmem_max: 4194304
+nfs_net_core_rmem_default: 4194304
+nfs_net_core_wmem_default: 4194304
+nfs_net_core_optmem_max: 4194304
+nfs_net_ipv4_tcp_rmem: "4096 87380 4194304"
+nfs_net_ipv4_tcp_low_latency: 1
+nfs_vm_dirty_background_ratio: 5
+nfs_vm_dirty_ratio: 10
+nfs_vm_min_free_kbytes: 262144
+nfs_vm_zone_reclaim_mode: 1
+data_disks: 
+ - "sdb"
+# - "sdc"
+nr_requests: 4096
+read_ahead_kb: 4096
+
